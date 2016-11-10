@@ -89,7 +89,7 @@ public class ItemCartComponent extends Item  implements TexturedItem {
 		if (item == null || item.getItemDamage() < 0 || item.getItemDamage() >= size() || this.getName(item.getItemDamage()) == null) {
 			return this.getUnlocalizedName();
 		}
-		return "item.SC2:" + this.getName(item.getItemDamage());
+		return "item.SC2:" + this.getRawName(item.getItemDamage());
 	}
 
 	@Override
