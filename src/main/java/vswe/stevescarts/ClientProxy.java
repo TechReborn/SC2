@@ -1,7 +1,9 @@
 package vswe.stevescarts;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
@@ -35,6 +37,15 @@ public class ClientProxy extends CommonProxy {
 		ModuleData.initModels();
 
 		TileEntityItemStackRenderer.instance = new ItemStackRenderer(TileEntityItemStackRenderer.instance);
+
+		ModelLoader.setCustomStateMapper(ModBlocks.UPGRADE.getBlock(), new DefaultStateMapper() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				String resourceDomain = Block.REGISTRY.getNameForObject(state.getBlock()).getResourceDomain();
+				String propertyString = getPropertyString(state.getProperties());
+				return new ModelResourceLocation(resourceDomain + ":upgrade", propertyString);
+			}
+		});
 	}
 
 	public class RenderManagerCart implements IRenderFactory<EntityMinecartModular> {

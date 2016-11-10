@@ -8,12 +8,105 @@
     "model": "stevescarts:upgrade"
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
     "type": {
       "0": {
         "textures": {
           "1": "stevescarts:blocks/batteries_icon"
+        }
+      },
+      "1": {
+        "textures": {
+          "1": "stevescarts:blocks/power_crystal_icon"
+        }
+      },
+      "2": {
+        "textures": {
+          "1": "stevescarts:blocks/module_knowledge_icon"
+        }
+      },
+      "3": {
+        "textures": {
+          "1": "stevescarts:blocks/industrial_espionage_icon"
+        }
+      },
+      "4": {
+        "textures": {
+          "1": "stevescarts:blocks/experienced_assembler_icon"
+        }
+      },
+      "5": {
+        "textures": {
+          "1": "stevescarts:blocks/new_era_icon"
+        }
+      },
+      "6": {
+        "textures": {
+          "1": "stevescarts:blocks/co2_friendly_icon"
+        }
+      },
+      "7": {
+        "textures": {
+          "1": "stevescarts:blocks/generic_engine_icon"
+        }
+      },
+      "8": {
+        "textures": {
+          "1": "stevescarts:blocks/module_input_icon"
+        }
+      },
+      "9": {
+        "textures": {
+          "1": "stevescarts:blocks/production_line_icon"
+        }
+      },
+      "10": {
+        "textures": {
+          "1": "stevescarts:blocks/cart_deployer_icon"
+        }
+      },
+      "11": {
+        "textures": {
+          "1": "stevescarts:blocks/cart_modifier_icon"
+        }
+      },
+      "12": {
+        "textures": {
+          "1": "stevescarts:blocks/cart_crane_icon"
+        }
+      },
+      "13": {
+        "textures": {
+          "1": "stevescarts:blocks/redstone_control_icon"
+        }
+      },
+      "14": {
+        "textures": {
+          "1": "stevescarts:blocks/creative_mode_icon"
+        }
+      },
+      "15": {
+        "textures": {
+          "1": "stevescarts:blocks/quick_demolisher_icon"
+        }
+      },
+      "16": {
+        "textures": {
+          "1": "stevescarts:blocks/entropy_icon"
+        }
+      },
+      "17": {
+        "textures": {
+          "1": "stevescarts:blocks/manager_bridge_icon"
+        }
+      },
+      "18": {
+        "textures": {
+          "1": "stevescarts:blocks/thermal_engine_icon"
+        }
+      },
+      "19": {
+        "textures": {
+          "1": "stevescarts:blocks/solar_panel_icon"
         }
       }
     },

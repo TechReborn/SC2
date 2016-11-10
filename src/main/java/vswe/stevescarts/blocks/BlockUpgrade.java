@@ -35,20 +35,17 @@ import vswe.stevescarts.upgrades.AssemblerUpgrade;
 public class BlockUpgrade extends BlockContainerBase {
 
 	public static PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final IUnlistedProperty<Integer> TYPE = Properties.toUnlisted(PropertyInteger.create("type", 0, AssemblerUpgrade.getUpgradesList().size()));
+	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, AssemblerUpgrade.getUpgradesList().size());
 
 	public BlockUpgrade() {
 		super(Material.ROCK);
 		this.setCreativeTab(StevesCarts.tabsSC2Blocks);
 		this.setDefaultState(
-			this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+			this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, 0));
 	}
 
 	protected BlockStateContainer createBlockState() {
-
-		FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-		return new ExtendedBlockState(this, new IProperty[] { FACING },
-			new IUnlistedProperty[] { TYPE });
+		return new BlockStateContainer(this, new IProperty[] { FACING, TYPE });
 	}
 
 	@Override
@@ -59,13 +56,6 @@ public class BlockUpgrade extends BlockContainerBase {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(FACING, getSideFromint(meta));
-	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntityUpgrade upgrade = (TileEntityUpgrade) world.getTileEntity(pos);
-		IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
-		return extendedBlockState.withProperty(TYPE, upgrade.getType()).withProperty(FACING, upgrade.getSide());
 	}
 
 	public EnumFacing getSideFromint(int i) {
