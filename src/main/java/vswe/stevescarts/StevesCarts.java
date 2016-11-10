@@ -60,9 +60,9 @@ public class StevesCarts {
 		this.useArcadeMobSounds = config.get("Settings", "useTetrisMobSounds", true).getBoolean(true);
 		ModItems.preBlockInit(config);
 		ItemBlockStorage.init();
+		AssemblerUpgrade.init();
 		ModBlocks.init();
 		ModItems.postBlockInit(config);
-		AssemblerUpgrade.init();
 		this.initCart(0, EntityMinecartModular.class);
 		EntityRegistry.registerModEntity(EntityEasterEgg.class, "Egg.Vswe", 2, StevesCarts.instance, 80, 3, true);
 		EntityRegistry.registerModEntity(EntityCake.class, "Cake.Vswe", 3, StevesCarts.instance, 80, 3, true);

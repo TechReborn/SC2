@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import vswe.stevescarts.blocks.BlockCartAssembler;
+import vswe.stevescarts.blocks.BlockUpgrade;
 import vswe.stevescarts.blocks.ModBlocks;
 import vswe.stevescarts.containers.ContainerBase;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -61,7 +62,12 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
 
 	public void setMaster(final TileEntityCartAssembler master, EnumFacing side) {
 		this.master = master;
+		if(side == null){
+			side = EnumFacing.NORTH; //TODO unconnected
+		}
 		this.side = side;
+		BlockUpgrade blockUpgrade = (BlockUpgrade) ModBlocks.UPGRADE.getBlock();
+		worldObj.setBlockState(pos, blockUpgrade.getDefaultState().withProperty(BlockUpgrade.FACING, side));
 	}
 
 	public EnumFacing getSide() {

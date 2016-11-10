@@ -14,24 +14,6 @@ import vswe.stevescarts.guis.GuiBase;
 
 public abstract class TileEntityBase extends TileEntity implements ITickable {
 
-	@Deprecated
-	int xCoord;
-
-	@Deprecated
-	int yCoord;
-
-	@Deprecated
-	int zCoord;
-
-	//This is bad, remove asap
-	@Override
-	public void setPos(BlockPos posIn) {
-		super.setPos(posIn);
-		xCoord = posIn.getX();
-		zCoord = posIn.getZ();
-		yCoord = posIn.getY();
-	}
-
 	public void receivePacket(final int id, final byte[] data, final EntityPlayer player) {
 	}
 

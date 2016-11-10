@@ -2,7 +2,8 @@ package vswe.stevescarts.blocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,6 +11,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -22,26 +24,75 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
+import vswe.stevescarts.helpers.PropertyString;
 import vswe.stevescarts.items.ModItems;
+import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
 public class BlockUpgrade extends BlockContainerBase {
 
-	public static final IUnlistedProperty<EnumFacing> SIDE = Properties.toUnlisted(PropertyEnum.create("side", EnumFacing.class));
+	public static PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final IUnlistedProperty<Integer> TYPE = Properties.toUnlisted(PropertyInteger.create("type", 0, AssemblerUpgrade.getUpgradesList().size()));
 
 	public BlockUpgrade() {
 		super(Material.ROCK);
 		this.setCreativeTab(StevesCarts.tabsSC2Blocks);
+		this.setDefaultState(
+			this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 
-	//	@SideOnly(Side.CLIENT)
-	//	public IIcon getIcon(final int side, final int meta) {
-	//		return AssemblerUpgrade.getStandardIcon();
-	//	}
-	//
-	//	public void registerBlockIcons(final IIconRegister register) {
-	//	}
+	protected BlockStateContainer createBlockState() {
+
+		FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+		return new ExtendedBlockState(this, new IProperty[] { FACING },
+			new IUnlistedProperty[] { TYPE });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return getSideFromEnum(state.getValue(FACING));
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(FACING, getSideFromint(meta));
+	}
+
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntityUpgrade upgrade = (TileEntityUpgrade) world.getTileEntity(pos);
+		IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+		return extendedBlockState.withProperty(TYPE, upgrade.getType()).withProperty(FACING, upgrade.getSide());
+	}
+
+	public EnumFacing getSideFromint(int i) {
+		if (i == 0) {
+			return EnumFacing.NORTH;
+		} else if (i == 1) {
+			return EnumFacing.SOUTH;
+		} else if (i == 2) {
+			return EnumFacing.EAST;
+		} else if (i == 3) {
+			return EnumFacing.WEST;
+		}
+		return EnumFacing.NORTH;
+	}
+
+	public int getSideFromEnum(EnumFacing facing) {
+		if (facing == EnumFacing.NORTH) {
+			return 0;
+		} else if (facing == EnumFacing.SOUTH) {
+			return 1;
+		} else if (facing == EnumFacing.EAST) {
+			return 2;
+		} else if (facing == EnumFacing.WEST) {
+			return 3;
+		}
+		return 0;
+	}
 
 	@Override
 	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
@@ -137,81 +188,43 @@ public class BlockUpgrade extends BlockContainerBase {
 		return false;
 	}
 
-	//TODO
-	/*public int getRenderType() {
-		return (this.renderAsNormalBlock() || StevesCarts.instance.blockRenderer == null) ? 0 : StevesCarts.instance.blockRenderer.getRenderId();
-	}*/
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return super.getRenderType(state);
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return getUpgradeBounds(source, pos);
+		return getUpgradeBounds(source, pos, state);
 	}
 
-	public final EnumFacing getUpgradeFace(IBlockAccess world, BlockPos pos) {
-		final TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileEntityUpgrade) {
-			final TileEntityUpgrade upgrade = (TileEntityUpgrade) tile;
-			BlockPos master = upgrade.getMaster().getPos();
-			if (master == null) {
-				return null;
-			}
-			if (master.getY() < pos.getY()) {
-				return EnumFacing.DOWN;
-			}
-			if (master.getY() > pos.getY()) {
-				return EnumFacing.UP;
-			}
-			if (master.getX() < pos.getX()) {
-				return EnumFacing.SOUTH;
-			}
-			if (master.getX() > pos.getX()) {
-				return EnumFacing.EAST;
-			}
-			if (master.getZ() < pos.getZ()) {
-				return EnumFacing.WEST;
-			}
-			if (master.getZ() > pos.getZ()) {
-				return EnumFacing.NORTH;
-			}
-		}
-		return null;
-	}
-
-	public final AxisAlignedBB getUpgradeBounds(IBlockAccess world, BlockPos pos) {
-		final TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileEntityUpgrade) {
-			final TileEntityUpgrade upgrade = (TileEntityUpgrade) tile;
-			if (upgrade.getMaster() == null) {
-				return FULL_BLOCK_AABB;
-			}
-			BlockPos master = upgrade.getMaster().getPos();
-			final float margin = 0.1875f;
-			final float width = 0.125f;
-			if (master == null) {
-				return getIdleBlockBounds();
-			}
-			if (master.getY() < pos.getY()) {
-				return new AxisAlignedBB(margin, 0.0f, margin, 1.0f - margin, width, 1.0f - margin);
-			}
-			if (master.getY() > pos.getY()) {
-				return new AxisAlignedBB(margin, 1.0f - width, margin, 1.0f - margin, 1.0f, 1.0f - margin);
-			}
-			if (master.getX() < pos.getX()) {
-				return new AxisAlignedBB(0.0f, margin, margin, width, 1.0f - margin, 1.0f - margin);
-			}
-			if (master.getX() > pos.getX()) {
-				return new AxisAlignedBB(1.0f - width, margin, margin, 1.0f, 1.0f - margin, 1.0f - margin);
-			}
-			if (master.getZ() < pos.getZ()) {
-				return new AxisAlignedBB(margin, margin, 0.0f, 1.0f - margin, 1.0f - margin, width);
-			}
-			if (master.getZ() > pos.getZ()) {
-				return new AxisAlignedBB(margin, margin, 1.0f - width, 1.0f - margin, 1.0f - margin, 1.0f);
-			}
+	public final AxisAlignedBB getUpgradeBounds(IBlockAccess world, BlockPos pos, IBlockState state) {
+		EnumFacing side = state.getValue(FACING).getOpposite();
+		final float margin = 0.1875f;
+		final float width = 0.125f;
+		if (side == EnumFacing.DOWN) {
+			return new AxisAlignedBB(margin, 0.0f, margin, 1.0f - margin, width, 1.0f - margin);
+		} else if (side == EnumFacing.UP) {
+			return new AxisAlignedBB(margin, 1.0f - width, margin, 1.0f - margin, 1.0f, 1.0f - margin);
+		} else if (side == EnumFacing.WEST) {
+			return new AxisAlignedBB(0.0f, margin, margin, width, 1.0f - margin, 1.0f - margin);
+		} else if (side == EnumFacing.EAST) {
+			return new AxisAlignedBB(1.0f - width, margin, margin, 1.0f, 1.0f - margin, 1.0f - margin);
+		} else if (side == EnumFacing.NORTH) {
+			return new AxisAlignedBB(margin, margin, 0.0f, 1.0f - margin, 1.0f - margin, width);
+		} else if (side == EnumFacing.SOUTH) {
+			return new AxisAlignedBB(margin, margin, 1.0f - width, 1.0f - margin, 1.0f - margin, 1.0f);
 		}
 		return FULL_BLOCK_AABB;
 	}
@@ -250,25 +263,5 @@ public class BlockUpgrade extends BlockContainerBase {
 	public TileEntity createNewTileEntity(final World world, final int var2) {
 		return new TileEntityUpgrade();
 	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if (world.getTileEntity(pos) instanceof TileEntityUpgrade) {
-			TileEntityUpgrade upgrade = (TileEntityUpgrade) world.getTileEntity(pos);
-			IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
-			if(upgrade.getSide() == null){
-				return super.getExtendedState(state, world, pos);
-			}
-			return extendedBlockState.withProperty(SIDE, upgrade.getSide());
-		}
-		return super.getExtendedState(state, world, pos);
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[] {},
-			new IUnlistedProperty[] { SIDE });
-	}
-
 
 }

@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "0": "stevescarts:items/blank_upgrade_icon",
+      "1": "stevescarts:items/blank_upgrade_icon"
+    },
+    "model": "stevescarts:upgrade"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "0": {
+        "textures": {
+          "1": "stevescarts:blocks/batteries_icon"
+        }
+      }
+    },
+    "facing": {
+      "south": { "y": 90 },
+      "north": { "y": 270  },
+      "east":  {  },
+      "west":  { "y": 180}
+    }
+  }
+}
