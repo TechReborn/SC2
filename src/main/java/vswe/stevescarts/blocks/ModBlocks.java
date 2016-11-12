@@ -81,6 +81,7 @@ public enum ModBlocks {
 					if (blockInfo.tileEntityClazz != null) {
 						GameRegistry.registerTileEntity(blockInfo.tileEntityClazz, blockInfo.tileEntityName);
 					}
+					System.out.println("Successfully registered block (" + blockInfo.name + ")");
 				} else {
 					System.out.println("This is not a block (" + blockInfo.name + ")");
 				}

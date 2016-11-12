@@ -6,8 +6,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
-import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.blocks.BlockRailAdvDetector;
 import vswe.stevescarts.blocks.ModBlocks;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
@@ -65,6 +63,8 @@ public enum DetectorType implements IStringSerializable {
 	private boolean emitRedstone;
 	private HashMap<Byte, OperatorObject> operators;
 
+	private String[] names = new String[] {"DetectorManager", "DetectorUnit", "DetectorStation", "DetectorJunction", "DetectorRedstoneUnit"};
+
 	public static PropertyEnum<DetectorType> SATE = PropertyEnum.create("detectortype", DetectorType.class);
 
 	DetectorType(final int meta, final boolean acceptCart, final boolean stopCart, final boolean emitRedstone, final String[] textures) {
@@ -81,9 +81,7 @@ public enum DetectorType implements IStringSerializable {
 
 	@Override
 	public String getName() {
-		final StringBuilder append = new StringBuilder().append("item.");
-		final StevesCarts instance = StevesCarts.instance;
-		return I18n.translateToLocal(append.append("SC2:").append("BlockDetector").append(this.meta).append(".name").toString());
+		return names[meta].toLowerCase();
 	}
 
 	//	public void registerIcons(final IIconRegister register) {
