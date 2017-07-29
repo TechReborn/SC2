@@ -207,12 +207,17 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder {
 	}
 
 	private boolean isTankValid(final int tankId, int sideId) {
-		switch(sideId) {
-			case 0: break;
-			case 5: return false;
-			default: sideId -= 1;
-		}
+		sideId -= 1;
 		return (layoutType != 1 || tankId == sideId) && (layoutType != 2 || color[sideId] == color[tankId]);
+	}
+
+	private boolean isTankValid(final int tankId, EnumFacing facing) {
+		switch (layoutType) {
+			case 0: return true;
+			case 1: return tankId == facingToTankId(facing);
+			case 2: return color[tankId] == facingToColorId(facing);
+			default: return false;
+		}
 	}
 
 	private boolean isFluidValid(final int sideId, final FluidStack fluid) {
@@ -414,13 +419,33 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder {
 		return super.getCapability(capability, facing);
 	}
 
-	public SCTank getValidTank(EnumFacing facing){
+	public SCTank getValidTank(EnumFacing facing) {
 		for (int i = 0; i < getTanks().length; i++) {
-			if(isTankValid(i, facing.getIndex())){
+			if(isTankValid(i, facing)) {
 				return getTanks()[i];
 			}
 		}
 		return null;
+	}
+
+	private int facingToColorId(EnumFacing facing) {
+		switch (facing.getIndex()) {
+			case 2: return 3; // north, yellow
+			case 3: return 2; // south, blue
+			case 4: return 4; // west, green
+			case 5: return 1; // east, red
+			default: return 1;
+		}
+	}
+
+	private int facingToTankId(EnumFacing facing) {
+		switch (facing.getIndex()) {
+			case 2: return 2; // north, yellow
+			case 3: return 1; // south, blue
+			case 4: return 3; // west, green
+			case 5: return 0; // east, red
+			default: return 0;
+		}
 	}
 
 	static {
