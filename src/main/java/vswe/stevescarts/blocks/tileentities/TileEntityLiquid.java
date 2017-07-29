@@ -207,7 +207,11 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder {
 	}
 
 	private boolean isTankValid(final int tankId, int sideId) {
-		sideId = sideId == 0 ? sideId : sideId - 1;
+		switch(sideId) {
+			case 0: break;
+			case 5: return false;
+			default: sideId -= 1;
+		}
 		return (layoutType != 1 || tankId == sideId) && (layoutType != 2 || color[sideId] == color[tankId]);
 	}
 
