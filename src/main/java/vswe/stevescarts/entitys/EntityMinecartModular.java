@@ -670,10 +670,10 @@ public class EntityMinecartModular extends EntityMinecart implements IInventory,
 		EnumRailDirection railDirection = ((BlockRailBase) blockState.getBlock()).getRailDirection(world, pos, blockState, this);
 		cornerFlip = ((railDirection == EnumRailDirection.SOUTH_EAST || railDirection == EnumRailDirection.SOUTH_WEST) && motionX < 0.0)
 			|| ((railDirection == EnumRailDirection.NORTH_EAST || railDirection == EnumRailDirection.NORTH_WEST) && motionX > 0.0);
-		if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.getBlock() && isDisabled()) {
+		if (ModBlocks.ADVANCED_DETECTOR.isAt(world, pos, blockState) && isDisabled()) {
 			releaseCart();
 		}
-		boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.getBlock()
+		boolean canBeDisabled = ModBlocks.ADVANCED_DETECTOR.isAt(world, pos, blockState)
 			&& (stateBelow.getBlock() != ModBlocks.DETECTOR_UNIT.getBlock() || !DetectorType.getTypeFromSate(stateBelow).canInteractWithCart() || DetectorType.getTypeFromSate(stateBelow).shouldStopCart());
 		final boolean forceUnDisable = wasDisabled && disabledPos != null && disabledPos.equals(pos);
 		if (!forceUnDisable && wasDisabled) {

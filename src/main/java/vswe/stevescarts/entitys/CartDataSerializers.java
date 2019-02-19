@@ -5,6 +5,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 
+import java.util.Arrays;
+
 public class CartDataSerializers {
 
 	public static void init() {
@@ -29,7 +31,7 @@ public class CartDataSerializers {
 
 		@Override
 		public int[] copyValue(int[] p_192717_1_) {
-			return p_192717_1_;
+			return p_192717_1_.clone();
 		}
 	};
 }

@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {"rail": "stevescarts:blocks/tracks/outfitted/kit/advanced_detector_0"}
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {"rail": "stevescarts:blocks/tracks/outfitted/kit/advanced_detector_0"}
+      }
+    },
+    "shape": {
+      "north_south": {
+        "model": "rail_flat"
+      },
+      "east_west": {
+        "model": "rail_flat", "y": 90
+      }
+    }
+  }
+}

@@ -37,7 +37,7 @@ public enum DetectorType implements IStringSerializable {
 		private void update(TileEntityDetector detector, boolean flag) {
 			BlockPos posUp = detector.getPos().up();
 			IBlockState stateUp = detector.getWorld().getBlockState(posUp);
-			if (stateUp.getBlock() == ModBlocks.ADVANCED_DETECTOR.getBlock()) {
+			if (ModBlocks.ADVANCED_DETECTOR.isAt(detector.getWorld(), posUp, stateUp)) {
 				((BlockRailAdvDetector) ModBlocks.ADVANCED_DETECTOR.getBlock()).refreshState(detector.getWorld(), posUp, stateUp, flag);
 			}
 		}

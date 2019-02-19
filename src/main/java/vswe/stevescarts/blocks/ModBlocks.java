@@ -1,6 +1,7 @@
 package vswe.stevescarts.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
@@ -8,6 +9,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -20,6 +23,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.blocks.tileentities.*;
+import vswe.stevescarts.compat.railcraft.RailcraftHook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +38,22 @@ public enum ModBlocks {
 	MODULE_TOGGLER("BlockActivator", BlockActivator.class, TileEntityActivator.class, "activator"),
 	DETECTOR_UNIT("BlockDetector", BlockDetector.class, TileEntityDetector.class, "detector"),
 	UPGRADE("upgrade", BlockUpgrade.class, TileEntityUpgrade.class, "upgrade"),
-	JUNCTION("BlockJunction", BlockRailJunction.class),
-	ADVANCED_DETECTOR("BlockAdvDetector", BlockRailAdvDetector.class),
+	JUNCTION("BlockJunction", BlockRailJunction.class) {
+		@Override
+		public boolean isAt(World world, BlockPos pos, IBlockState state) {
+			if (super.isAt(world, pos, state))
+				return true;
+			return RailcraftHook.getInstance().isJunction(world, pos, state);
+		}
+	},
+	ADVANCED_DETECTOR("BlockAdvDetector", BlockRailAdvDetector.class) {
+		@Override
+		public boolean isAt(World world, BlockPos pos, IBlockState state) {
+			if (super.isAt(world, pos, state))
+				return true;
+			return RailcraftHook.getInstance().isAdvDetector(world, pos, state);
+		}
+	},
 	STORAGE("BlockMetalStorage", BlockMetalStorage.class);
 
 	public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<>();
@@ -130,6 +148,10 @@ public enum ModBlocks {
 
 	public Block getBlock() {
 		return block;
+	}
+
+	public boolean isAt(World world, BlockPos pos, IBlockState state) {
+		return state.getBlock() == block;
 	}
 
 	public interface ISubtypeItemBlockModelDefinition {
