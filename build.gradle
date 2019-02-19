@@ -50,6 +50,9 @@ repositories {
 		name = "Modmuss50"
 		url = "http://maven.modmuss50.me/"
 	}
+	flatDir {
+		dirs 'lib'
+	}
 }
 
 
@@ -67,6 +70,10 @@ dependencies {
 		transitive = false
 	}
 	deobfCompile  'net.industrial-craft:industrialcraft-2:2.8.104-ex112'
+	
+	// lib folder
+    compile name: "railcraft-12.0.0-beta-4-api"
+    provided name: "railcraft-12.0.0-beta-4-api"
 }
 
 processResources{

@@ -194,4 +194,6 @@ public class BlockRailAdvDetector extends BlockRail {
 	public void refreshState(World world, BlockPos pos, IBlockState state, boolean flag) {
 		new BlockRailBase.Rail(world, pos, state).place(flag, false);
 	}
+
+
 }

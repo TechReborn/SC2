@@ -32,6 +32,7 @@ public class SCConfig {
 	public static boolean enableEaster = true;
 	public static boolean enableHalloween = true;
 	public static boolean enableChristmas = true;
+	public static boolean railcraftCompat = true;
 
 	private static Multimap<String,String> ironTierRepair;
 	private static Multimap<String,String> diamondTierRepair;
@@ -83,6 +84,9 @@ public class SCConfig {
 		enableEaster = config.getBoolean("Enable Easter", "Events", true, "If the easter event can occur");
 		enableHalloween = config.getBoolean("Enable Halloween", "Events", true, "If the halloween event can occur");
 		enableChristmas = config.getBoolean("Enable Christmas", "Events", true, "If the christmas event can occur");
+
+		railcraftCompat = config.getBoolean("Enable Railcraft Compatibility", "Compatibility", true, "If Railcraft compatibility content would be "
+				+ "added when Railcraft is present");
         save();
 	}
 
